@@ -1,4 +1,4 @@
-import SubmitButton from '@/components/elements/submitButton'
+import SubmitButton from '@/components/elements/submitButton';
 
 export default function Page() {
   return (
@@ -6,5 +6,5 @@ export default function Page() {
       <h1 className="text-6xl w-full text-center">Numer0n</h1>
       <SubmitButton text="START"></SubmitButton>
     </main>
-  )
+  );
 }

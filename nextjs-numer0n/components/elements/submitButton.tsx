@@ -1,6 +1,6 @@
 type Props = {
-  text: string
-}
+  text: string;
+};
 
 export default function SubmitButton(props: Props) {
   return (
@@ -12,5 +12,5 @@ export default function SubmitButton(props: Props) {
         {props.text}
       </button>
     </>
-  )
+  );
 }

@@ -1,0 +1,41 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+option java_package = "com.engjoy.kotlingrpc.proto";
+
+service Numer0nPracticeService {
+  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
+  rpc Ask(AskRequest) returns (AskResponse);
+}
+
+message CreateRoomRequest {
+  // the number of digits of the answer
+  int32 digits = 1;
+}
+
+message CreateRoomResponse {
+  // the room id of the created room at the server
+  string room_id = 1;
+
+  // the expiry time of the room
+  google.protobuf.Timestamp expiry = 2;
+}
+
+message AskRequest {
+  // the room id of the room to ask
+  string room_id = 1;
+
+  // the repeated int32 numbers to ask. the length of the numbers should be the same as the digits of the room.
+  repeated int32 numbers = 2;
+}
+
+message AskResponse {
+  // the number of eat, matching the correct number and position
+  int32 eat = 1;
+
+  // the number of bite, matching the correct number but not the position
+  int32 bite = 2;
+
+  // the expiry time of the room. Can be extended by asking.
+  google.protobuf.Timestamp expiry = 3;
+}

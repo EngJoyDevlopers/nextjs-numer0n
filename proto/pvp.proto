@@ -1,0 +1,155 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+option java_package = "com.engjoy.kotlingrpc.proto";
+
+// -----------------------------------------------------------------------------
+// Numer0nPvPMatchingService
+// -----------------------------------------------------------------------------
+service Numer0nPvPMatchingService {
+  // Create a matching room.
+  rpc CreateRoom(CreateMatchingRoomRequest) returns (CreateMatchingRoomResponse);
+
+  // get room info
+  rpc GetRoomInfo(GetMatchingRoomInfoRequest) returns (GetMatchingRoomInfoResponse);
+
+  // Enter the room. 
+  //
+  // Server streams state of the room after player enters the room.
+  // Server also manages players entering the room by this connection.
+  // So cancelling this stream by client is treated as exiting the room.
+  //
+  // When matching is completed, the server will finish streaming.
+  rpc EnterRoom(EnterMatchingRoomRequest) returns (stream MatchingRoomState);
+}
+
+message GameSetting {
+  // the number of digits of the answer
+  int32 digits = 2;  
+}
+
+message CreateMatchingRoomRequest {
+  // A list for reserved players.
+  //
+  // reserved players are ensured to be able to enter this room.
+  // 0, 1 or 2 user ids are available.
+  //  0 ids: any two players can use this room to start a game.
+  //  1 ids: typically craete user. to start game with any other player.
+  //  2 ids: typically contains create user. to start game with the specific user. 
+  repeated string reserved_player_ids = 1;
+
+  GameSetting setting = 2;
+}
+  
+message CreateMatchingRoomResponse {
+  // id of the matching room created by server
+  string room_id = 1;
+}
+
+message GetMatchingRoomInfoRequest {
+  // target room id
+  string room_id = 1;
+
+  // player id who requests
+  // TODO: how to remove it?
+  string player_id = 2;
+}
+
+message GetMatchingRoomInfoRequest {
+  // current player id list entering the room.
+  repeated string member_player_ids = 1;
+
+  // Game setting
+  GameSetting setting = 2;
+}
+
+message EnterMatchingRoomRequest {
+  // the room id. 
+  string room_id = 1;
+
+  // entering player id.
+  // TODO: how to remove it?
+  string player_id = 2;
+}
+
+message MatchingRoomState {
+  // player ids who are in this room now.
+  repeated string member_player_ids = 1;
+}
+
+// -----------------------------------------------------------------------------
+//  Numer0nPvPService
+// -----------------------------------------------------------------------------
+service Numer0nPvPService {
+  // Enter the game room. 
+  //
+  // Server streams state of the game after player entering the room.
+  // Server also manages players entering the room by this connection.
+  // When client cancels the streaming, the game is forcely completed.
+  rpc EnterRoom(EnterGameRoomRequest) returns (stream GameState);
+
+  rpc SetUp(GameSetUpRequest) returns (GameSetUpResponse);
+
+  // 
+  rpc Ask(AskRequest) returns (AskResponse);
+}
+
+message EnterGameRoomRequest {
+  // the room id. 
+  string room_id = 1;
+
+  // entering player id.
+  // TODO: how to remove it?
+  string player_id = 2;
+}
+
+message GameState {
+  // player ids who are in this room now.
+  repeated string player_ids = 1;
+
+  oneOf state {
+    SettingUp setting_up = 2;
+    Playing playing = 3;
+    Finished finished = 4;
+  }
+  message SettingUp {
+    string prepared_player_ids = 1;
+  }
+  message Playing {
+    int32 turn = 1;
+    // who is the next ask player.
+    string next_ask_player_id = 2;
+  }
+  message Finished {
+    // winner of the game.
+    string winner = 1;
+  }
+}
+
+message GameSetUpRequest {
+  // my numbers.
+  repeated int32 numbers = 1;
+
+  // TODO: how to remove it?
+  string player_id = 2;
+}
+message GameSetUpResponse {
+}
+message AskRequest {
+  // the room id of the room to ask
+  string room_id = 1;
+
+  // the repeated int32 numbers to ask. the length of the numbers should be the same as the digits of the room.
+  repeated int32 numbers = 2;
+}
+
+message AskResponse {
+  // the number of eat, matching the correct number and position
+  int32 eat = 1;
+
+  // the number of bite, matching the correct number but not the position
+  int32 bite = 2;
+
+  // the expiry time of the room. Can be extended by asking.
+  google.protobuf.Timestamp expiry = 3;
+}

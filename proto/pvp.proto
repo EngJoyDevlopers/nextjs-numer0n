@@ -11,7 +11,7 @@ service Numer0nPvPMatchingService {
   rpc CreateRoom(CreateMatchingRoomRequest) returns (CreateMatchingRoomResponse);
 
   // get room info
-  rpc GetRoomInfo(GetMatchingRoomInfoRequest) returns (GetMatchingRoomInfoResponse);
+  rpc GetRoomInfo(PvPGetMatchingRoomInfoRequest) returns (PvPGetMatchingRoomInfoResponse);
 
   // Enter the room. 
   //
@@ -46,7 +46,7 @@ message CreateMatchingRoomResponse {
   string room_id = 1;
 }
 
-message GetMatchingRoomInfoRequest {
+message PvPGetMatchingRoomInfoRequest {
   // target room id
   string room_id = 1;
 
@@ -55,7 +55,7 @@ message GetMatchingRoomInfoRequest {
   string player_id = 2;
 }
 
-message GetMatchingRoomInfoRequest {
+message PvPGetMatchingRoomInfoResponse {
   // current player id list entering the room.
   repeated string member_player_ids = 1;
 
@@ -91,7 +91,7 @@ service Numer0nPvPService {
   rpc SetUp(GameSetUpRequest) returns (GameSetUpResponse);
 
   // 
-  rpc Ask(AskRequest) returns (AskResponse);
+  rpc Ask(PvPAskRequest) returns (PvPAskResponse);
 }
 
 message EnterGameRoomRequest {
@@ -107,7 +107,7 @@ message GameState {
   // player ids who are in this room now.
   repeated string player_ids = 1;
 
-  oneOf state {
+  oneof state {
     SettingUp setting_up = 2;
     Playing playing = 3;
     Finished finished = 4;
@@ -135,7 +135,7 @@ message GameSetUpRequest {
 }
 message GameSetUpResponse {
 }
-message AskRequest {
+message PvPAskRequest {
   // the room id of the room to ask
   string room_id = 1;
 
@@ -143,7 +143,7 @@ message AskRequest {
   repeated int32 numbers = 2;
 }
 
-message AskResponse {
+message PvPAskResponse {
   // the number of eat, matching the correct number and position
   int32 eat = 1;
 

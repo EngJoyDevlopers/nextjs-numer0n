@@ -43,6 +43,7 @@ dependencies {
 	implementation("io.github.lognet:grpc-spring-boot-starter:$grpcSpringBootVersion")
 	implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
 	implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 }
 
 kotlin {

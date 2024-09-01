@@ -39,16 +39,32 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.0")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	implementation("io.github.lognet:grpc-spring-boot-starter:$grpcSpringBootVersion")
 	implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
 	implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 }
 
 kotlin {
 	compilerOptions {
 		freeCompilerArgs.addAll("-Xjsr305=strict")
 	}
+}
+
+sourceSets.getByName("test") {
+    java.srcDir("src/test/kotlin")
+}
+tasks.withType<Test> {
+    systemProperty("spring.profiles.active", "test")
+}
+
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+    val keys = listOf("spring.profiles.active")
+    for (key in keys) {
+        project.properties[key]?.let { systemProperty(key, it) }
+    }
 }
 
 tasks.withType<Test> {
@@ -77,16 +93,12 @@ protobuf {
     }
 }
 
-tasks.register("cleanProtoDir") {
-	doLast {
+tasks.register<Copy>("copyProtoFiles") {
+    doFirst {
 		Path(protoDstDir).deleteRecursively()
 	}
-}
-
-tasks.register<Copy>("copyProtoFiles") {
 	from(protoSrcDir)
 	into(protoDstDir)
-	dependsOn("cleanProtoDir")
 }
 
 tasks.named("generateProto") {

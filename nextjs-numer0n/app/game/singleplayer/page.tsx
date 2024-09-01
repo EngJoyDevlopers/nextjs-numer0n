@@ -1,23 +1,42 @@
 'use client';
 
-// app/game/singleplayer/page.tsx
-import React from 'react';
+import React, { useState } from 'react';
+import { checkGuess } from '../../utils/numeronLogic';
 import GameBoard from '../components/GameBoard';
 import GameStatus from '../components/GameStatus';
 import PlayerInput from '../components/PlayerInput';
 
-// ランダムな3桁の整数を作成
-const number = Math.floor(Math.random() * 1000);
-
 const SinglePlayPage: React.FC = () => {
-  const [gameState, setGameState] =
-    React.useState('ゲームが開始されていません');
-  const [status, setStatus] = React.useState('');
+  const [gameState, setGameState] = useState('');
+  const [status, setStatus] = useState('');
+  const [correctNumber, setCorrectNumber] = useState<string>('');
+  const [attempts, setAttempts] = useState<number>(0);
+
+  // ゲームの初期化
+  React.useEffect(() => {
+    // ランダムな3桁の整数を生成して設定
+    const randomNumber = (Math.floor(Math.random() * 900) + 100).toString();
+    setCorrectNumber(randomNumber);
+    setGameState('ゲームが開始されました。');
+    setStatus('');
+  }, []);
 
   const handlePlayerInput = (input: string) => {
-    // プレイヤーの入力に対する処理をここに追加
+    if (correctNumber === '') {
+      setStatus('ゲームが開始されていません。');
+      return;
+    }
+
+    const { message, eatCount } = checkGuess(input);
+
     setGameState(`プレイヤーの入力: ${input}`);
-    setStatus('入力を処理中...');
+    setStatus(message);
+
+    if (eatCount === 3) {
+      setGameState('ゲームクリア！おめでとう！');
+    } else {
+      setAttempts((prevAttempts) => prevAttempts + 1);
+    }
   };
 
   return (
@@ -26,6 +45,7 @@ const SinglePlayPage: React.FC = () => {
       <GameBoard gameState={gameState} />
       <PlayerInput onSubmit={handlePlayerInput} />
       <GameStatus status={status} />
+      <p>試行回数: {attempts}</p>
     </main>
   );
 };

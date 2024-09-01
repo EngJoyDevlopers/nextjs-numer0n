@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-// 盤面や進行状況などゲームの状態を表示するためのコンポーネント
+// 進行状況などゲームの状態を表示するためのコンポーネント
 interface GameBoardProps {
   gameState: string;
 }

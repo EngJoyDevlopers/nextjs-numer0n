@@ -8,7 +8,7 @@ class Cards internal constructor(
     val numbers: List<Int>
 ) {
     override fun toString(): String {
-        return numbers.joinToString("-") { n -> n.toString() }
+        return "[${numbers.joinToString(", ") { n -> n.toString() }}]"
     }
 
     fun asked(prediction: List<Int>): AskResult {

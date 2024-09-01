@@ -42,7 +42,7 @@ class PracticeMode(
         logger.info(
             "Asked: " +
                 "id=$roomId, " +
-                "asked=${numbers.joinToString("-") { x -> x.toString() }}, " +
+                "asked=[${numbers.joinToString(", ") { x -> x.toString() }}], " +
                 "ans=${room.cards}, " +
                 "eat=${res.eat}, bite=${res.bite}"
         )
@@ -80,4 +80,4 @@ private class PracticeRoom(
     }
 }
 
-class PracticeRoomInfo(val id: String, val expirry: ZonedDateTime)
+data class PracticeRoomInfo(val id: String, val expirry: ZonedDateTime)

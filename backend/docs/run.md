@@ -6,10 +6,10 @@
 # 環境構築
 * java21を[インストール](https://www.oracle.com/jp/java/technologies/downloads/#jdk21-windows)する
 * IDEは動けばなんでも良いと思うが、[fleet](https://www.jetbrains.com/ja-jp/fleet/)など入れる
-* リクエストの実験用ツールを入れる。こちらもなんでも良いが、[https://github.com/fullstorydev/grpcui](grpcui)など
+* リクエストの実験用ツールを入れる。こちらもなんでも良いが、[grpcui](https://github.com/fullstorydev/grpcui)など
 
 # サーバーの立ち上げ方
-* ```./gradlew bootRun```を実行する
+* ```./gradlew bootRun --args='--spring.profiles.active=dev'```を実行する
     - gRPC特有のこととして、```../proto```から```src/main/proto```にコピーする、protoをkotlin用に変換する、というステップがある
     - ビルドに成功すると、以下のようなのが出るはず？
 ![実行時のコンソール](./images/run/run_server.png)

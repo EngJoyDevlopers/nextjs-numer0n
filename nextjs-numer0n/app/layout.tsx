@@ -1,4 +1,6 @@
+import NextAuthProvider from '@/providers/NextAuth';
 import './ui/global.css';
+import React from 'react';
 
 export default function RootLayout({
   children
@@ -7,7 +9,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body><NextAuthProvider>{children}</NextAuthProvider></body>
     </html>
   );
 }

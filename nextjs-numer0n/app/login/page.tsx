@@ -9,7 +9,7 @@ export default function Home() {
       <div className='z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex text-center '>
         {!session && (
           <button
-            onClick={() => signIn(undefined, { callbackUrl: "http://localhost:3000/" })}
+            onClick={() => signIn(undefined, { callbackUrl: process.env.NEXT_PUBLIC_DOMAIN_URL })}
             className='bg-blue-700 rounded-md shadow-md text-white h-8 w-32 hover:bg-blue-600'
           >
             Sign In
@@ -17,12 +17,7 @@ export default function Home() {
         )}
         
         {session && (
-          <button
-            onClick={() => signOut()}
-            className='bg-blue-700 rounded-md shadow-md text-white h-8 w-32 hover:bg-blue-600'
-          >
-            Sign Out
-          </button>
+         <a href={process.env.NEXT_PUBLIC_DOMAIN_URL}>すでにログイン済みです、TOPへ移動する</a>
         )}
       </div>
     </main>

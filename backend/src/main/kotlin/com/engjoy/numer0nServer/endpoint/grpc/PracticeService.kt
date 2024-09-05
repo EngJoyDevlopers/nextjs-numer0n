@@ -3,6 +3,7 @@ package com.engjoy.numer0nServer.endpoint.grpc
 import com.engjoy.kotlingrpc.proto.Numer0nPracticeServiceGrpcKt
 import com.engjoy.kotlingrpc.proto.Practice
 import com.engjoy.numer0nServer.core.Clock
+import com.engjoy.numer0nServer.core.GenUuid
 import com.google.rpc.BadRequest
 import io.grpc.Metadata
 import io.grpc.Status
@@ -15,10 +16,11 @@ import com.engjoy.numer0nServer.usecase.practice.PracticeMode
 
 @GRpcService
 class PracticeService(
+    genUuid: GenUuid,
     genNpc: GenNpcCards,
     clock: Clock
 ) : Numer0nPracticeServiceGrpcKt.Numer0nPracticeServiceCoroutineImplBase() {
-    private val _service = PracticeMode(genNpc, clock)
+    private val _service = PracticeMode(genUuid, genNpc, clock)
 
     override suspend fun createRoom(request: Practice.CreateRoomRequest): Practice.CreateRoomResponse {
         try {

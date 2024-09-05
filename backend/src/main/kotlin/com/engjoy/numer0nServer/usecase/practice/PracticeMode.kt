@@ -1,15 +1,18 @@
 package com.engjoy.numer0nServer.usecase.practice
 
 import com.engjoy.numer0nServer.core.Clock
+import com.engjoy.numer0nServer.core.GenUuid
 import com.engjoy.numer0nServer.core.Logging
 import com.engjoy.numer0nServer.core.logger
 import com.engjoy.numer0nServer.domain.cards.AskResult
 import com.engjoy.numer0nServer.domain.cards.Cards
+import org.springframework.stereotype.Component
 import java.lang.IllegalArgumentException
 import java.time.ZonedDateTime
-import java.util.UUID
 
+@Component
 class PracticeMode(
+    private val _genUuid: GenUuid,
     private val _genNpc: GenNpcCards,
     private val _clock: Clock
 ) {
@@ -24,9 +27,16 @@ class PracticeMode(
         val cards = _genNpc.genCards(digits)
         val room = PracticeRoom(cards, _clock)
 
-        var id = UUID.randomUUID().toString()
-        while (_rooms.containsKey(id)) {
-            id = UUID.randomUUID().toString()
+        var id: String? = null
+        for (i in 0..<256) {
+            val candidate = _genUuid.next().toString()
+            if (!_rooms.containsKey(candidate)) {
+                id = candidate
+                break
+            }
+        }
+        if (id == null) {
+            throw RuntimeException("Fail to generate non-duplicated ID 256 times.")
         }
         _rooms[id] = room
 

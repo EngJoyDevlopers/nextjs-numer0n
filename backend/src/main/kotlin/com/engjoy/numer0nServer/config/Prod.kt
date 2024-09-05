@@ -1,6 +1,8 @@
 package com.engjoy.numer0nServer.config
 
 import com.engjoy.numer0nServer.core.Clock
+import com.engjoy.numer0nServer.core.GenUuid
+import com.engjoy.numer0nServer.core.GenUuidRandom
 import com.engjoy.numer0nServer.core.SystemClock
 import kotlin.random.Random
 import com.engjoy.numer0nServer.usecase.practice.GenNpcCards
@@ -20,5 +22,10 @@ class Prod : ConfigBase {
     @Bean
     override fun clock(): Clock {
         return SystemClock()
+    }
+
+    @Bean
+    override fun uuidGenerator(): GenUuid {
+        return GenUuidRandom()
     }
 }

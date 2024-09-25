@@ -10,8 +10,11 @@ export default function Page() {
       <div className="grid grid-cols-2 grid-rows-1 gap-5">
       <p className='fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30'>
           Hello&nbsp;
-          <code className='font-mono font-bold'>{session?.user?.name ?? 'guest'}</code>
-        </p>
+          <span className='font-mono font-bold'>{session?.user?.name ?? 'guest'}</span>
+      </p>
+      <p className='fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30'>
+          <span className='font-mono font-bold'>アクセストークン: {session?.user?.accessToken ?? '取得できませんでした'}</span>
+      </p>
         
         {session && (
           <button

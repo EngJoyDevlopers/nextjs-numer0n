@@ -13,7 +13,9 @@ export const authOptions = {
     callbacks: {
       async session({ session, token }) {
         // セッションコールバックの返却値へアクセストークンを追加
-        session.user.accessToken = token.accessToken;
+        if (session?.user) {
+          session.user.accessToken = token.accessToken;
+        }
         return session;
       },
       async jwt({ token, account }) {
